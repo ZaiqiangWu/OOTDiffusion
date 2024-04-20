@@ -1,0 +1,1 @@
+python run_ootd.py --model_path ../input_images/ichao.png --cloth_path ../target_garments/first_garment.jpg  --scale 2.0 --sample 1
