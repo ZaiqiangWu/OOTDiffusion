@@ -66,7 +66,7 @@ if __name__ == '__main__':
     mask_gray = mask_gray.resize((768, 1024), Image.NEAREST)
     
     masked_vton_img = Image.composite(mask_gray, model_img, mask)
-    masked_vton_img.save('./images_output/mask.jpg')
+    masked_vton_img.save('./images_output/mask.png')
 
     images = model(
         model_type=model_type,
