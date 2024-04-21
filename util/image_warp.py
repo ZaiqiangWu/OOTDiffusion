@@ -27,7 +27,7 @@ class ImageReshaper:
 
     def back2rawSahpe(self, img):
         raw_img = np.array(self.img)
-        new_img = img
+        new_img = np.array(img)
         w, h = self.img.size
         raw_new_img = self.roi2raw(new_img, self.inv_trans, [h, w])
         composed = raw_img.copy()
