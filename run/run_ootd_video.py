@@ -102,7 +102,7 @@ from util.image2video import Image2VideoWriter
 
 if __name__ == '__main__':
 
-    video_path = 'example_videos/ichao.mp4'
+    video_path = './example_videos/ichao.mp4'
     cloth_path='./target_garments/first_garment.jpg'
     video_loader=VideoLoader(video_path)
     video_writer=Image2VideoWriter()
