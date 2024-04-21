@@ -4,7 +4,6 @@ import numpy as np
 import torch
 import torchvision.transforms as transforms
 import ffmpeg
-from OpticalFlow.optical_flow import OpticalFlow
 
 class VideoLoader:
     def __init__(self, path):
@@ -25,17 +24,9 @@ class VideoLoader:
         # self.heatmap_gen = HeatmapGenerator()
         self.post_transform = transforms.Resize((512, 512))
         self.opt_flow = None
-        self.optical_flow = OpticalFlow()
 
-    def compute_opt_flow(self):
-        print("Start computing optical flow")
-        opt_flow_list = []
-        for i in range(self.__len__()-1):
-            with torch.no_grad():
-                opt_flow = self.optical_flow(self.frames[i],self.frames[i+1]).cpu()
-            opt_flow_list.append(opt_flow)
-        self.opt_flow=opt_flow_list
-        print("Finish computing optical flow:",self.opt_flow.__len__())
+
+
 
     def crop2square(self):
         if self.frameWidth > self.frameHeight:
