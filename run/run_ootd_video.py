@@ -109,8 +109,8 @@ if __name__ == '__main__':
     tryon_model=TryOnModel(cloth_path)
     for i in range(len(video_loader)):
         print(i,'/',len(video_loader))
-        if i>10:
-            break
+        #if i>10:
+        #    break
         frame = tryon_model.forward(video_loader.get_raw_numpy_image(i))
         video_writer.append(frame)
 
