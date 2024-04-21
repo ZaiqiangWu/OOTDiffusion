@@ -69,7 +69,7 @@ class TryOnModel:
         frame=Image.fromarray(frame)
         img_reshaper=ImageReshaper(frame)
         frame_43=img_reshaper.get_reshaped()
-        model_img = frame_43.resize(768,1024)
+        model_img = frame_43.resize((768,1024))
         keypoints = openpose_model(model_img.resize((384, 512)))
         model_parse, _ = parsing_model(model_img.resize((384, 512)))
 
@@ -109,6 +109,8 @@ if __name__ == '__main__':
     tryon_model=TryOnModel(cloth_path)
     for i in range(len(video_loader)):
         print(i,'/',len(video_loader))
+        if i>10:
+            break
         frame = tryon_model.forward(video_loader.get_raw_numpy_image(i))
         video_writer.append(frame)
 
