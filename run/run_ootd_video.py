@@ -14,6 +14,7 @@ from preprocess.openpose.run_openpose import OpenPose
 from preprocess.humanparsing.run_parsing import Parsing
 from ootd.inference_ootd_hd import OOTDiffusionHD
 from ootd.inference_ootd_dc import OOTDiffusionDC
+from util.image_warp import ImageReshaper,crop2_43
 
 
 import argparse
@@ -56,7 +57,7 @@ def build_model():
         raise ValueError("model_type must be \'hd\' or \'dc\'!")
     return model
 
-from util.image_warp import ImageReshaper,crop2_43
+
 
 class TryOnModel:
     def __init__(self,cloth_path):
