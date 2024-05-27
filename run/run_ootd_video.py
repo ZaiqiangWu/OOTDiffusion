@@ -102,7 +102,7 @@ from util.image2video import Image2VideoWriter
 
 if __name__ == '__main__':
 
-    video_path = '../example_videos/ichao.mp4'
+    video_path = '../example_videos/tshirt_wu.mov'
     cloth_path='../target_garments/first_garment.jpg'
     video_loader=VideoLoader(video_path)
     video_writer=Image2VideoWriter()
@@ -114,6 +114,6 @@ if __name__ == '__main__':
         frame = tryon_model.forward(video_loader.get_raw_numpy_image(i))
         video_writer.append(frame)
 
-    video_writer.make_video('output.mp4',fps=30)
+    video_writer.make_video('output_wu.mp4',fps=30)
 
 
