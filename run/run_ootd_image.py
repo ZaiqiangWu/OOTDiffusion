@@ -103,14 +103,14 @@ from util.image2video import Image2VideoWriter
 
 if __name__ == '__main__':
 
-    img_path = '../example_images/male_back.webp'
+    img_path = '../example_images/male_side.png'
     cloth_path='../target_garments/first_garment.jpg'
     img=cv2.imread(img_path)
 
     tryon_model=TryOnModel(cloth_path)
 
     frame = tryon_model.forward(img)
-    cv2.imwrite('./output_back.jpg',frame)
+    cv2.imwrite('./output_side.jpg',frame)
 
 
 
