@@ -102,7 +102,7 @@ from util.target_garment_dict import target_garment_dict
 
 if __name__ == '__main__':
 
-    video_path = '../example_videos/ichao.mp4'
+    video_path = '../quantitative_videos/lab_00_test.mp4'
     target_id=0
     cloth_path=os.path.join('../target_garments',target_garment_dict[target_id])
     video_loader=MultithreadVideoLoader(video_path)
