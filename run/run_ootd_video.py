@@ -98,11 +98,13 @@ class TryOnModel:
 
 from util.multithread_video_loader import  MultithreadVideoLoader
 from util.image2video import Image2VideoWriter
+from util.target_garment_dict import target_garment_dict
 
 if __name__ == '__main__':
 
-    video_path = '../example_videos/tshirt_wu.mov'
-    cloth_path='../target_garments/first_garment.jpg'
+    video_path = '../example_videos/ichao.mp4'
+    target_id=0
+    cloth_path=os.path.join('../target_garments',target_garment_dict[target_id])
     video_loader=MultithreadVideoLoader(video_path)
     video_writer=Image2VideoWriter()
     tryon_model=TryOnModel(cloth_path)
