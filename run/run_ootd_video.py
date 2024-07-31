@@ -14,7 +14,7 @@ from preprocess.openpose.run_openpose import OpenPose
 from preprocess.humanparsing.run_parsing import Parsing
 from ootd.inference_ootd_hd import OOTDiffusionHD
 from ootd.inference_ootd_dc import OOTDiffusionDC
-from util.image_warp import ImageReshaper,crop2_43
+from util.image_warp import crop2_43
 
 
 import argparse
@@ -67,8 +67,7 @@ class TryOnModel:
     def forward(self,frame:np.ndarray):
         frame=frame[:,:,[2,1,0]]
         frame=Image.fromarray(frame)
-        img_reshaper=ImageReshaper(frame)
-        frame_43=img_reshaper.get_reshaped()
+        frame_43=crop2_43(frame)
         model_img = frame_43.resize((768,1024))
         keypoints = openpose_model(model_img.resize((384, 512)))
         model_parse, _ = parsing_model(model_img.resize((384, 512)))
@@ -94,8 +93,8 @@ class TryOnModel:
         )
 
         result=images[0]
-        raw_result=img_reshaper.back2rawSahpe(result)
-        return raw_result[:,:,[2,1,0]]
+        result=np.array(result)
+        return result[:,:,[2,1,0]]
 
 from util.video_loader import VideoLoader
 from util.image2video import Image2VideoWriter

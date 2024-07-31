@@ -3,10 +3,39 @@ import cv2
 import numpy as np
 
 
-def crop2_43(img: Image.Image):
-    img_reshaper = ImageReshaper(img)
-    return img_reshaper.get_reshaped()
+def crop2_43(img):
+    if isinstance(img, Image.Image):
+        # Convert PIL image to NumPy array
+        img = np.array(img)
+        pil_input = True
+    elif isinstance(img, np.ndarray):
+        pil_input = False
+    else:
+        raise TypeError("Input must be a PIL Image or a NumPy array.")
 
+    h, w = img.shape[:2]
+    if 3 * h > 4 * w:  # too tall
+        delta = h - w * 4 / 3
+        img = img[int(delta / 2):h - int(delta / 2), :, :]
+    else:
+        delta = w - h * 3 / 4
+        img = img[:, int(delta / 2):w - int(delta / 2), :]
+
+    if pil_input:
+        # Convert NumPy array back to PIL image
+        img = Image.fromarray(img)
+
+    return img
+
+def crop2_169(img: np.ndarray) -> np.ndarray:
+    h,w=img.shape[:2]
+    if 9*h>16*w:#too tall
+        delta=h-w*16/9
+        img=img[int(delta/2):h-int(delta/2),:,:]
+    else:
+        delta = w-h*9/16
+        img = img[:,int(delta / 2):w - int(delta / 2), :]
+    return img
 
 class ImageReshaper:
     def __init__(self, img: Image.Image):
