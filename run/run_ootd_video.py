@@ -96,23 +96,23 @@ class TryOnModel:
         result=np.array(result)
         return result[:,:,[2,1,0]]
 
-from util.video_loader import VideoLoader
+from util.multithread_video_loader import  MultithreadVideoLoader
 from util.image2video import Image2VideoWriter
 
 if __name__ == '__main__':
 
     video_path = '../example_videos/tshirt_wu.mov'
     cloth_path='../target_garments/first_garment.jpg'
-    video_loader=VideoLoader(video_path)
+    video_loader=MultithreadVideoLoader(video_path)
     video_writer=Image2VideoWriter()
     tryon_model=TryOnModel(cloth_path)
     for i in range(len(video_loader)):
         print(i,'/',len(video_loader))
         if i>10:
             break
-        frame = tryon_model.forward(video_loader.get_raw_numpy_image(i))
+        frame = tryon_model.forward(video_loader.cap())
         video_writer.append(frame)
 
-    video_writer.make_video('output_wu.mp4',fps=30)
+    video_writer.make_video('output_wu.mp4',fps=video_loader.get_fps())
 
 
