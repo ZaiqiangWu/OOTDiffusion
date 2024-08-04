@@ -99,22 +99,32 @@ class TryOnModel:
 from util.multithread_video_loader import  MultithreadVideoLoader
 from util.image2video import Image2VideoWriter
 from util.target_garment_dict import target_garment_dict
+from util.video_dict import video_dict
 
-if __name__ == '__main__':
-
-    video_path = '../quantitative_videos/lab_00_test.mp4'
-    target_id=0
-    cloth_path=os.path.join('../target_garments',target_garment_dict[target_id])
-    video_loader=MultithreadVideoLoader(video_path)
-    video_writer=Image2VideoWriter()
-    tryon_model=TryOnModel(cloth_path)
+def gen_result(video_id, target_id):
+    video_path = os.path.join('../quantitative_videos/', video_dict[video_id])
+    cloth_path = os.path.join('../target_garments', target_garment_dict[target_id])
+    video_loader = MultithreadVideoLoader(video_path)
+    video_writer = Image2VideoWriter()
+    tryon_model = TryOnModel(cloth_path)
     for i in range(len(video_loader)):
-        print(i,'/',len(video_loader))
-        #if i>10:
+        print(i, '/', len(video_loader))
+        # if i>10:
         #    break
         frame = tryon_model.forward(video_loader.cap())
         video_writer.append(frame)
 
-    video_writer.make_video('output_wu.mp4',fps=video_loader.get_fps())
+    target_dir = './ootd_results'
+    os.makedirs(target_dir, exist_ok=True)
+
+    video_writer.make_video(os.path.join(target_dir, str(video_id).zfill(2) + '_' + str(target_id).zfill(2) + '.mp4'),
+                            fps=video_loader.get_fps())
+
+if __name__ == '__main__':
+    for i in range(25):
+        video_id=i
+        target_id=i
+        gen_result(video_id, target_id)
+
 
 
