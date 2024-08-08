@@ -121,10 +121,11 @@ def gen_result(video_id, target_id):
                             fps=video_loader.get_fps())
 
 if __name__ == '__main__':
-    for i in range(12,25):
-        video_id=i
-        target_id=i
-        gen_result(video_id, target_id)
+    gen_result(17, 5)
+    #for i in range(12,25):
+    #    video_id=i
+    #    target_id=i
+    #    gen_result(video_id, target_id)
 
 
 
