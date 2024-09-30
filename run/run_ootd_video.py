@@ -17,6 +17,7 @@ from ootd.inference_ootd_dc import OOTDiffusionDC
 from util.image_warp import crop2_43
 
 
+
 import argparse
 parser = argparse.ArgumentParser(description='run ootd')
 parser.add_argument('--gpu_id', '-g', type=int, default=0, required=False)
@@ -120,8 +121,28 @@ def gen_result(video_id, target_id):
     video_writer.make_video(os.path.join(target_dir, str(video_id).zfill(2) + '_' + str(target_id).zfill(2) + '.mp4'),
                             fps=video_loader.get_fps())
 
+def gen_result_by_path(video_path, target_id):
+    cloth_path = os.path.join('../target_garments', target_garment_dict[target_id])
+    video_loader = MultithreadVideoLoader(video_path)
+    video_writer = Image2VideoWriter()
+    tryon_model = TryOnModel(cloth_path)
+    for i in range(len(video_loader)):
+        print(i, '/', len(video_loader))
+        # if i>10:
+        #    break
+        frame = tryon_model.forward(video_loader.cap())
+        video_writer.append(frame)
+
+    target_dir = './ootd_results'
+    os.makedirs(target_dir, exist_ok=True)
+
+    video_writer.make_video(os.path.join(target_dir, os.path.basename(video_path).split('.')[0] + '_' + str(target_id).zfill(2) + '.mp4'),
+                            fps=video_loader.get_fps())
+
 if __name__ == '__main__':
-    gen_result(17, 5)
+    #gen_result(17, 5)
+    gen_result_by_path('../kiyama_1.mp4', 3)
+    gen_result_by_path('../kiyama_2.mp4', 3)
     #for i in range(12,25):
     #    video_id=i
     #    target_id=i
