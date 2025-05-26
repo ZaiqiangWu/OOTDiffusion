@@ -12,9 +12,10 @@ os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:128"
 
 from preprocess.openpose.run_openpose import OpenPose
 from preprocess.humanparsing.run_parsing import Parsing
-#from ootd.inference_ootd_hd import OOTDiffusionHD
+from ootd.inference_ootd_hd import OOTDiffusionHD
 from ootd.inference_ootd_dc import OOTDiffusionDC
 from util.image_warp import crop2_43
+
 
 
 
@@ -101,28 +102,26 @@ from util.multithread_video_loader import  MultithreadVideoLoader
 from util.image2video import Image2VideoWriter
 from util.target_garment_dict import target_garment_dict
 from util.video_dict import video_dict
+from util.multithread_video_writer import MultithreadVideoWriter
 
 def gen_result(video_path, cloth_path):
-
-    video_loader = MultithreadVideoLoader(video_path)
-    video_writer = Image2VideoWriter()
-    tryon_model = TryOnModel(cloth_path)
-    for i in range(len(video_loader)):
-        print(i, '/', len(video_loader))
-        if i>10:
-           break
-        frame = tryon_model.forward(video_loader.cap())
-        video_writer.append(frame)
-
     target_dir = './ootd_results'
     os.makedirs(target_dir, exist_ok=True)
     target_dir = os.path.join(target_dir, 'ootd')
     os.makedirs(target_dir, exist_ok=True)
-
+    video_loader = MultithreadVideoLoader(video_path)
     video_name = os.path.basename(video_path)
-
-    video_writer.make_video(os.path.join(target_dir, video_name),
+    video_writer = MultithreadVideoWriter(os.path.join(target_dir, video_name),
                             fps=video_loader.get_fps())
+    tryon_model = TryOnModel(cloth_path)
+    for i in range(len(video_loader)):
+        print(i, '/', len(video_loader))
+        #if i>10:
+        #   break
+        frame = tryon_model.forward(video_loader.cap())
+        video_writer.append(frame)
+    video_writer.make_video()
+    video_writer.close()
 
 
 
@@ -130,6 +129,7 @@ if __name__ == '__main__':
     #video_path = os.path.join('../quantitative_videos/', video_dict[video_id])
     #cloth_path = os.path.join('../fullbody_garments', 'han.jpg')
     gen_result('../raw_videos/jin_16_test.mp4', '../fullbody_garments/han.jpg')
+    gen_result('../raw_videos/jin_16_train.mp4', '../fullbody_garments/han.jpg')
 
 
 
