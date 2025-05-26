@@ -12,7 +12,7 @@ os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:128"
 
 from preprocess.openpose.run_openpose import OpenPose
 from preprocess.humanparsing.run_parsing import Parsing
-from ootd.inference_ootd_hd import OOTDiffusionHD
+#from ootd.inference_ootd_hd import OOTDiffusionHD
 from ootd.inference_ootd_dc import OOTDiffusionDC
 from util.image_warp import crop2_43
 
