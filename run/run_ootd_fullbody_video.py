@@ -8,6 +8,7 @@ from utils_ootd import get_mask_location
 PROJECT_ROOT = Path(__file__).absolute().parents[1].absolute()
 sys.path.insert(0, str(PROJECT_ROOT))
 import os
+
 os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:128"
 
 from preprocess.openpose.run_openpose import OpenPose
@@ -16,10 +17,8 @@ from ootd.inference_ootd_hd import OOTDiffusionHD
 from ootd.inference_ootd_dc import OOTDiffusionDC
 from util.image_warp import crop2_43
 
-
-
-
 import argparse
+
 parser = argparse.ArgumentParser(description='run ootd')
 parser.add_argument('--gpu_id', '-g', type=int, default=0, required=False)
 #parser.add_argument('--model_path', type=str, default="", required=True)
@@ -32,16 +31,14 @@ parser.add_argument('--sample', type=int, default=1, required=False)
 parser.add_argument('--seed', type=int, default=0, required=False)
 args = parser.parse_args([])
 
-
 openpose_model = OpenPose(args.gpu_id)
 parsing_model = Parsing(args.gpu_id)
-
 
 category_dict = ['upperbody', 'lowerbody', 'dress']
 category_dict_utils = ['upper_body', 'lower_body', 'dresses']
 
-model_type = args.model_type # "hd" or "dc" dc: fullbody
-category = args.category # 0:upperbody; 1:lowerbody; 2:dress
+model_type = args.model_type  # "hd" or "dc" dc: fullbody
+category = args.category  # 0:upperbody; 1:lowerbody; 2:dress
 cloth_path = "./target_garments/first_garment.jpg"
 model_path = ""
 
@@ -49,6 +46,7 @@ image_scale = args.scale
 n_steps = args.step
 n_samples = args.sample
 seed = args.seed
+
 
 def build_model():
     if model_type == "hd":
@@ -60,17 +58,16 @@ def build_model():
     return model
 
 
-
 class TryOnModel:
-    def __init__(self,cloth_path):
-        self.model=build_model()
+    def __init__(self, cloth_path):
+        self.model = build_model()
         self.cloth_img = crop2_43(Image.open(cloth_path)).resize((768, 1024))
 
-    def forward(self,frame:np.ndarray):
-        frame=frame[:,:,[2,1,0]]
-        frame=Image.fromarray(frame)
-        frame_43=crop2_43(frame)
-        model_img = frame_43.resize((768,1024))
+    def forward(self, frame: np.ndarray):
+        frame = frame[:, :, [2, 1, 0]]
+        frame = Image.fromarray(frame)
+        frame_43 = crop2_43(frame)
+        model_img = frame_43.resize((768, 1024))
         keypoints = openpose_model(model_img.resize((384, 512)))
         model_parse, _ = parsing_model(model_img.resize((384, 512)))
 
@@ -94,15 +91,17 @@ class TryOnModel:
             seed=seed,
         )
 
-        result=images[0]
-        result=np.array(result)
-        return result[:,:,[2,1,0]]
+        result = images[0]
+        result = np.array(result)
+        return result[:, :, [2, 1, 0]]
 
-from util.multithread_video_loader import  MultithreadVideoLoader
+
+from util.multithread_video_loader import MultithreadVideoLoader
 from util.image2video import Image2VideoWriter
 from util.target_garment_dict import target_garment_dict
 from util.video_dict import video_dict
 from util.multithread_video_writer import MultithreadVideoWriter
+
 
 def gen_result(video_path, cloth_path):
     target_dir = './ootd_results'
@@ -112,17 +111,16 @@ def gen_result(video_path, cloth_path):
     video_loader = MultithreadVideoLoader(video_path)
     video_name = os.path.basename(video_path)
     video_writer = MultithreadVideoWriter(os.path.join(target_dir, video_name),
-                            fps=video_loader.get_fps())
+                                          fps=video_loader.get_fps())
     tryon_model = TryOnModel(cloth_path)
     for i in range(len(video_loader)):
         print(i, '/', len(video_loader))
-        #if i>10:
-        #   break
+        if i > 10:
+            break
         frame = tryon_model.forward(video_loader.cap())
         video_writer.append(frame)
     video_writer.make_video()
     video_writer.close()
-
 
 
 if __name__ == '__main__':
@@ -130,8 +128,3 @@ if __name__ == '__main__':
     #cloth_path = os.path.join('../fullbody_garments', 'han.jpg')
     gen_result('../raw_videos/jin_16_test.mp4', '../fullbody_garments/han.jpg')
     gen_result('../raw_videos/jin_16_train.mp4', '../fullbody_garments/han.jpg')
-
-
-
-
-
