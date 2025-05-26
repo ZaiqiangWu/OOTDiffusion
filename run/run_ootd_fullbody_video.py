@@ -115,8 +115,8 @@ def gen_result(video_path, cloth_path):
     tryon_model = TryOnModel(cloth_path)
     for i in range(len(video_loader)):
         print(i, '/', len(video_loader))
-        if i > 10:
-            break
+        #if i > 10:
+        #    break
         frame = tryon_model.forward(video_loader.cap())
         video_writer.append(frame)
     video_writer.make_video()
@@ -128,3 +128,9 @@ if __name__ == '__main__':
     #cloth_path = os.path.join('../fullbody_garments', 'han.jpg')
     gen_result('../raw_videos/jin_16_test.mp4', '../fullbody_garments/han.jpg')
     gen_result('../raw_videos/jin_16_train.mp4', '../fullbody_garments/han.jpg')
+    gen_result('../raw_videos/jin_16_test.mp4', '../fullbody_garments/dress.jpg')
+    gen_result('../raw_videos/jin_16_train.mp4', '../fullbody_garments/dress.jpg')
+    gen_result('../raw_videos/jin_16_test.mp4', '../fullbody_garments/coat.jpg')
+    gen_result('../raw_videos/jin_16_train.mp4', '../fullbody_garments/coat.jpg')
+    gen_result('../raw_videos/jin_16_test.mp4', '../fullbody_garments/korean.jpg')
+    gen_result('../raw_videos/jin_16_train.mp4', '../fullbody_garments/korean.jpg')
