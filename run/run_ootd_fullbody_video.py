@@ -102,51 +102,36 @@ from util.image2video import Image2VideoWriter
 from util.target_garment_dict import target_garment_dict
 from util.video_dict import video_dict
 
-def gen_result(video_id, target_id):
-    video_path = os.path.join('../quantitative_videos/', video_dict[video_id])
-    cloth_path = os.path.join('../target_garments', target_garment_dict[target_id])
+def gen_result(video_path, cloth_path):
+
     video_loader = MultithreadVideoLoader(video_path)
     video_writer = Image2VideoWriter()
     tryon_model = TryOnModel(cloth_path)
     for i in range(len(video_loader)):
         print(i, '/', len(video_loader))
-        # if i>10:
-        #    break
+        if i>10:
+           break
         frame = tryon_model.forward(video_loader.cap())
         video_writer.append(frame)
 
     target_dir = './ootd_results'
     os.makedirs(target_dir, exist_ok=True)
-
-    video_writer.make_video(os.path.join(target_dir, str(video_id).zfill(2) + '_' + str(target_id).zfill(2) + '.mp4'),
-                            fps=video_loader.get_fps())
-
-def gen_result_by_path(video_path, target_id):
-    cloth_path = os.path.join('../target_garments', target_garment_dict[target_id])
-    video_loader = MultithreadVideoLoader(video_path)
-    video_writer = Image2VideoWriter()
-    tryon_model = TryOnModel(cloth_path)
-    for i in range(len(video_loader)):
-        print(i, '/', len(video_loader))
-        # if i>10:
-        #    break
-        frame = tryon_model.forward(video_loader.cap())
-        video_writer.append(frame)
-
-    target_dir = './ootd_results'
+    target_dir = os.path.join(target_dir, 'ootd')
     os.makedirs(target_dir, exist_ok=True)
 
-    video_writer.make_video(os.path.join(target_dir, os.path.basename(video_path).split('.')[0] + '_' + str(target_id).zfill(2) + '.mp4'),
+    video_name = os.path.basename(video_path)
+
+    video_writer.make_video(os.path.join(target_dir, video_name),
                             fps=video_loader.get_fps())
+
+
 
 if __name__ == '__main__':
-    #gen_result(17, 5)
-    gen_result_by_path('../kiyama_1.mp4', 3)
-    gen_result_by_path('../kiyama_2.mp4', 3)
-    #for i in range(12,25):
-    #    video_id=i
-    #    target_id=i
-    #    gen_result(video_id, target_id)
+    #video_path = os.path.join('../quantitative_videos/', video_dict[video_id])
+    #cloth_path = os.path.join('../fullbody_garments', 'han.jpg')
+    gen_result('../raw_videos/jin_16_test.mp4', '../fullbody_garments/han.jpg')
+
+
 
 
 
