@@ -106,10 +106,13 @@ from util.multithread_video_writer import MultithreadVideoWriter
 def gen_result(video_path, cloth_path):
     target_dir = './ootd_results'
     os.makedirs(target_dir, exist_ok=True)
-    target_dir = os.path.join(target_dir, 'ootd')
+    garment_name = os.path.basename(cloth_path).split('.')[0]
+    target_dir = os.path.join(target_dir, garment_name)
     os.makedirs(target_dir, exist_ok=True)
     video_loader = MultithreadVideoLoader(video_path)
     video_name = os.path.basename(video_path)
+
+
     video_writer = MultithreadVideoWriter(os.path.join(target_dir, video_name),
                                           fps=video_loader.get_fps())
     tryon_model = TryOnModel(cloth_path)
