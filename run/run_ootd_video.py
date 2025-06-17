@@ -102,9 +102,9 @@ from util.image2video import Image2VideoWriter
 from util.target_garment_dict import target_garment_dict
 from util.video_dict import video_dict
 
-def gen_result(video_id, target_id):
-    video_path = os.path.join('../quantitative_videos/', video_dict[video_id])
-    cloth_path = os.path.join('../target_garments', target_garment_dict[target_id])
+def gen_result(video_path, cloth_path):
+    #video_path = os.path.join('../quantitative_videos/', video_dict[video_id])
+    #cloth_path = os.path.join('../target_garments', target_garment_dict[target_id])
     video_loader = MultithreadVideoLoader(video_path)
     video_writer = Image2VideoWriter()
     tryon_model = TryOnModel(cloth_path)
@@ -141,8 +141,9 @@ def gen_result_by_path(video_path, target_id):
 
 if __name__ == '__main__':
     #gen_result(17, 5)
-    gen_result_by_path('../kiyama_1.mp4', 3)
-    gen_result_by_path('../kiyama_2.mp4', 3)
+    gen_result('../raw_videos/jin_16_test.mp4', '../target_garments/jin_23_white_bg.jpg')
+    gen_result('../raw_videos/jin_16_test.mp4', '../target_garments/jin_17_white_bg.jpg')
+
     #for i in range(12,25):
     #    video_id=i
     #    target_id=i
