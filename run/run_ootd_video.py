@@ -141,7 +141,7 @@ def gen_result_by_path(video_path, target_id):
 
 if __name__ == '__main__':
     #gen_result(17, 5)
-    gen_result('../raw_videos/jin_16_test.mp4', '../target_garments/jin_23_white_bg.jpg')
+    #gen_result('../raw_videos/jin_16_test.mp4', '../target_garments/jin_23_white_bg.jpg')
     gen_result('../raw_videos/jin_16_test.mp4', '../target_garments/jin_17_white_bg.jpg')
 
     #for i in range(12,25):
