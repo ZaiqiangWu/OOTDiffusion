@@ -105,6 +105,8 @@ from util.video_dict import video_dict
 def gen_result(video_path, cloth_path):
     #video_path = os.path.join('../quantitative_videos/', video_dict[video_id])
     #cloth_path = os.path.join('../target_garments', target_garment_dict[target_id])
+    video_name = os.path.basename(video_path).split('.')[0]
+    garment_name = os.path.basename(cloth_path).split('.')[0]
     video_loader = MultithreadVideoLoader(video_path)
     video_writer = Image2VideoWriter()
     tryon_model = TryOnModel(cloth_path)
@@ -118,7 +120,7 @@ def gen_result(video_path, cloth_path):
     target_dir = './ootd_results'
     os.makedirs(target_dir, exist_ok=True)
 
-    video_writer.make_video(os.path.join(target_dir, str(video_id).zfill(2) + '_' + str(target_id).zfill(2) + '.mp4'),
+    video_writer.make_video(os.path.join(target_dir, video_name+'_'+garment_name+'.mp4'),
                             fps=video_loader.get_fps())
 
 def gen_result_by_path(video_path, target_id):
